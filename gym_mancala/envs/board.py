@@ -1,9 +1,9 @@
 import copy
-
+import numpy as np
 
 class Board:
-    mancala = [0, 0]
-    marbles = [[4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4]]
+    mancala = np.array([0, 0])
+    marbles = np.array([[4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4]])
     player2_turn = False
     game_over = False
 
