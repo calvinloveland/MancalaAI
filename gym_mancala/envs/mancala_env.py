@@ -9,6 +9,7 @@ class MancalaEnv(gym.Env):
         self.board = Board()
         self.action_space = spaces.Discrete(6)
         self.observation_space = spaces.Box(low=0, high=46, shape=(2, 6))
+        self.player = 0
 
     def step(self, action):
         self.board.execute_turn(action)
@@ -22,4 +23,4 @@ class MancalaEnv(gym.Env):
         self.board.print_board()
 
     def calculate_reward(self):
-        return self.board.mancala[0] - self.board.mancala[0] + sum(self.board.marbles[0]) - sum(self.board.marbles[0])
+        return self.board.mancala[0] - self.board.mancala[1] + sum(self.board.marbles[0]) - sum(self.board.marbles[1])

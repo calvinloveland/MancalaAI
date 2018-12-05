@@ -1,11 +1,8 @@
 import copy
 import numpy as np
 
+
 class Board:
-    mancala = np.array([0, 0])
-    marbles = np.array([[4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4]])
-    player2_turn = False
-    game_over = False
 
     def __init__(self, board=None, move=None):
         if board is not None:
@@ -15,6 +12,11 @@ class Board:
             self.game_over = copy.deepcopy(board.game_over)
             if move is not None:
                 self.execute_turn(move)
+        else:
+            self.mancala = np.array([0, 0])
+            self.marbles = np.array([[4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4]])
+            self.player2_turn = False
+            self.game_over = False
 
     def execute_turn(self, n):
         # Initialize variables:
@@ -28,8 +30,11 @@ class Board:
 
         # don't select empty spaces
         if moving_marbles == 0:
+            print("INVALID MOVE!")
+            print("Player " + str(int(self.player2_turn) + 1) + " Loses!")
             self.game_over = True
-            self.mancala[int(self.player2_turn)] = -1
+            self.mancala[int(self.player2_turn)] = -48
+
 
         # start placing
         while moving_marbles != 0:
