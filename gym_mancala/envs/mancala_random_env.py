@@ -16,7 +16,7 @@ class MancalaRandomEnv(MancalaEnv):
                     break
                 move = (move + 1) % 6
             self.board.execute_turn(move)
-        ob = self.board.marbles
+        ob = self.normalize_marbles()
         return ob, self.calculate_reward(), self.board.game_over, {}
 
 

@@ -22,7 +22,7 @@ if __name__ == '__main__':
               nb_steps=40000,
               action_repetition=1,
               callbacks=None,
-              verbose=1,
+              verbose=2,
               visualize=True,
               nb_max_start_steps=0,
               start_step_policy=None,

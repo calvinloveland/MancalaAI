@@ -24,7 +24,8 @@ class MancalaEnv(gym.Env):
         self.board.print_board()
 
     def calculate_reward(self):
-        return self.board.mancala[self.player] - self.board.mancala[1 - self.player] + sum(self.board.marbles[self.player]) - sum(self.board.marbles[1 - self.player])
+        return self.board.mancala[self.player] - self.board.mancala[1 - self.player]   # \
+               # + ((sum(self.board.marbles[self.player]) - sum(self.board.marbles[1 - self.player])) * 0.8)
 
     def normalize_marbles(self):
         return np.divide(np.subtract(self.board.marbles, 3), 3)

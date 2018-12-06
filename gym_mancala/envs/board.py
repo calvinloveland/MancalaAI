@@ -19,6 +19,9 @@ class Board:
             self.game_over = False
 
     def execute_turn(self, n):
+        if self.game_over:
+            self.player2_turn = not self.player2_turn
+            return
         # Initialize variables:
         current_side = self.player2_turn
         current_space = n + 1
