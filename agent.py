@@ -2,7 +2,7 @@ from rl.agents.dqn import DQNAgent
 from rl.memory import SequentialMemory
 
 def build_agent(model,env):
-    memory = SequentialMemory(limit=1000000, window_length=3)
+    memory = SequentialMemory(limit=10000, window_length=1)
     return DQNAgent(model=model,
                     nb_actions=env.action_space.n,
                     memory=memory,

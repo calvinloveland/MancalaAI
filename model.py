@@ -4,15 +4,15 @@ import keras.backend as K
 
 def build_model(env):
 
-    inputShape = (3,) + env.observation_space.shape
+    inputShape = (1,) + env.observation_space.shape
     print("InputShape:")
     print(inputShape)
     model = Sequential()
-    model.add(Dense(32, input_shape=inputShape, activation='relu'))
+    model.add(Dense(32, input_shape=inputShape, activation='sigmoid'))
     model.add(Flatten())
     model.add(Dense(64, activation='relu'))
     model.add(Dense(128, activation='relu'))
-    model.add(Dense(env.action_space.n, activation='linear'))
+    model.add(Dense(env.action_space.n, activation='tanh'))
     # model.compile(loss='categorical_crossentropy',
     #               optimizer='sgd',
     #               metrics=['accuracy'])
