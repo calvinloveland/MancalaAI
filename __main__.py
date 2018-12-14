@@ -5,17 +5,19 @@ import random
 import math
 import numpy as np
 
+from gym_mancala.envs import MancalaUserEnv
+from gym_mancala.envs.board import Board
 from gym_mancala.envs.mancala_random_env import MancalaRandomEnv
 from agent import build_agent
 from model import build_model
 from keras.optimizers import Adam, SGD
 from keras.models import load_model
 
-MODEL_NUMBER = 7
+MODEL_NUMBER = 8
 NETWORKS_PATH = 'networks/'
 PATH = NETWORKS_PATH + 'Model' + str(MODEL_NUMBER) + '/'
-BEST_NETWORK_MODEL = 'Model2/model.HDF5'
-BEST_NETWORK_WEIGHTS = 'Model2/1881'
+BEST_NETWORK_MODEL = NETWORKS_PATH + 'Model2/model.HDF5'
+BEST_NETWORK_WEIGHTS = NETWORKS_PATH + 'Model2/1881'
 STEPS = 5000
 
 
@@ -59,8 +61,8 @@ def test_networks():
                 try:
                     history = agent.test(environment, nb_episodes=10,
                                          action_repetition=1,
-                                         callbacks=None
-                                         , visualize=False,
+                                         callbacks=None,
+                                         visualize=False,
                                          nb_max_episode_steps=None,
                                          nb_max_start_steps=0,
                                          start_step_policy=None,
@@ -80,8 +82,23 @@ def test_networks():
 
 
 def play_network():
+    print("You are Player 2 on the bottom of the board")
+    print("When prompted give a space between 0-5")
+    print("Selecting an empty space will cause you to lose the game")
     model = load_model(BEST_NETWORK_MODEL)
-    model.load_weights(BEST_NETWORK_WEIGHTS)
+    environment = MancalaUserEnv()
+    environment.board.print_board()
+    agent = build_agent(model, environment, STEPS)
+    agent.compile(optimizer=Adam(lr=.01))
+    agent.load_weights(BEST_NETWORK_WEIGHTS)
+    agent.test(environment, nb_episodes=1,
+               action_repetition=1,
+               callbacks=None,
+               visualize=False,
+               nb_max_episode_steps=None,
+               nb_max_start_steps=0,
+               start_step_policy=None,
+               verbose=0)
 
 
 if __name__ == '__main__':
@@ -93,7 +110,6 @@ if __name__ == '__main__':
     elif userInput == 'n':
         test_networks()
     elif userInput == 'p':
-        networkPath = input("Specify the network path or leave blank to play against the best network:")
         play_network()
     else:
         print("Invalid input")

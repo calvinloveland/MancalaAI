@@ -14,3 +14,8 @@ register(
     id='MancalaMinMax-v0',
     entry_point='gym_foo.envs:MancalaMinMaxEnv',
 )
+
+register(
+    id='MancalaUser-v0',
+    entry_point='gym_foo.envs:MancalaUserEnv',
+)
