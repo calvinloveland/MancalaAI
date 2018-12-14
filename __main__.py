@@ -14,6 +14,8 @@ from keras.models import load_model
 MODEL_NUMBER = 7
 NETWORKS_PATH = 'networks/'
 PATH = NETWORKS_PATH + 'Model' + str(MODEL_NUMBER) + '/'
+BEST_NETWORK_MODEL = 'Model2/model.HDF5'
+BEST_NETWORK_WEIGHTS = 'Model2/1881'
 STEPS = 5000
 
 
@@ -49,20 +51,20 @@ def test_networks():
         model = load_model(NETWORKS_PATH + dirname + "/model.HDF5")
         print(model.summary())
         for filename in filenames:
-            print('Testing: ' + filename)
             if 'HDF5' not in filename:
+                print('Testing: ' + dirname + '/' + filename)
                 agent = build_agent(model, environment, STEPS)
                 agent.compile(optimizer=Adam(lr=.01))
                 agent.load_weights(NETWORKS_PATH + dirname + '/' + filename)
                 try:
                     history = agent.test(environment, nb_episodes=10,
-                               action_repetition=1,
-                               callbacks=None
-                               , visualize=False,
-                               nb_max_episode_steps=None,
-                               nb_max_start_steps=0,
-                               start_step_policy=None,
-                               verbose=2)
+                                         action_repetition=1,
+                                         callbacks=None
+                                         , visualize=False,
+                                         nb_max_episode_steps=None,
+                                         nb_max_start_steps=0,
+                                         start_step_policy=None,
+                                         verbose=2)
                     avg = np.mean(history.history.get('episode_reward'))
                     print("Average score: " + str(avg))
                     avg_scores[dirname + '/' + filename] = avg
@@ -78,7 +80,8 @@ def test_networks():
 
 
 def play_network():
-    print("TODO")
+    model = load_model(BEST_NETWORK_MODEL)
+    model.load_weights(BEST_NETWORK_WEIGHTS)
 
 
 if __name__ == '__main__':
