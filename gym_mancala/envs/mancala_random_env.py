@@ -3,6 +3,7 @@ import random
 from gym_mancala.envs.mancala_env import MancalaEnv
 from gym_mancala.envs.board import Board
 
+
 class MancalaRandomEnv(MancalaEnv):
 
     def step(self, action):
@@ -17,5 +18,3 @@ class MancalaRandomEnv(MancalaEnv):
             self.board.execute_turn(move)
         ob = self.normalize_marbles()
         return ob, self.calculate_reward(), self.board.game_over, {}
-
-

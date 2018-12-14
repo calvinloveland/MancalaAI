@@ -41,7 +41,6 @@ class Board:
             # self.player2_turn = not self.player2_turn
             # return
 
-
         # start placing
         while moving_marbles != 0:
             if current_space > 5:

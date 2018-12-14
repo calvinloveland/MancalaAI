@@ -2,8 +2,8 @@ from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 import keras.backend as K
 
-def build_model(env):
 
+def build_model(env):
     inputShape = (1,) + env.observation_space.shape
     print("InputShape:")
     print(inputShape)
