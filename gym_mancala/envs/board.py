@@ -10,6 +10,7 @@ class Board:
             self.marbles = copy.deepcopy(board.marbles)
             self.player2_turn = copy.deepcopy(board.player2_turn)
             self.game_over = copy.deepcopy(board.game_over)
+            self.invalid_move = copy.deepcopy(board.invalid_move)
             if move is not None:
                 self.execute_turn(move)
         else:
@@ -17,6 +18,7 @@ class Board:
             self.marbles = np.array([[4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4]])
             self.player2_turn = False
             self.game_over = False
+            self.invalid_move = ''
 
     def execute_turn(self, n):
         if self.game_over:
@@ -33,10 +35,11 @@ class Board:
 
         # don't select empty spaces
         if moving_marbles == 0:
-            print("INVALID MOVE!")
-            print("Player " + str(int(self.player2_turn) + 1) + " Loses!")
+            self.invalid_move = "Player " + str(int(self.player2_turn) + 1) + " made an invalid move"
             self.game_over = True
             self.mancala[int(self.player2_turn)] = -48
+            # self.player2_turn = not self.player2_turn
+            # return
 
 
         # start placing
@@ -74,6 +77,7 @@ class Board:
             self.player2_turn = not self.player2_turn
 
     def print_board(self):
+        print(self.invalid_move)
         print(str(int(self.player2_turn) + 1))
         print(str(self.mancala[0]) + '<-' + str(list(reversed(self.marbles[0]))) + '<-')
         print(' ->' + str(self.marbles[1]) + '->' + str(self.mancala[1]))

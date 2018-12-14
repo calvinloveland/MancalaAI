@@ -12,6 +12,12 @@ def build_model(env):
     model.add(Flatten())
     model.add(Dense(64, activation='relu'))
     model.add(Dense(128, activation='relu'))
+    # model.add(Dense(256, activation='relu'))
+    # model.add(Dense(512, activation='relu'))
+    # model.add(Dense(512, activation='relu'))
+    # model.add(Dense(512, activation='relu'))
+    # model.add(Dense(512, activation='relu'))
+    # model.add(Dense(512, activation='relu'))
     model.add(Dense(env.action_space.n, activation='tanh'))
     # model.compile(loss='categorical_crossentropy',
     #               optimizer='sgd',

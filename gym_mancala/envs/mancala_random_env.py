@@ -5,7 +5,6 @@ from gym_mancala.envs.board import Board
 
 class MancalaRandomEnv(MancalaEnv):
 
-
     def step(self, action):
         if int(self.board.player2_turn) == self.player:
             self.board.execute_turn(action)
