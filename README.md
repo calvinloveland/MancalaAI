@@ -17,6 +17,8 @@ The easiest way to get these dependencies is to simply run:
 pip install -r requirements.txt
 ```
 
+Then edit $HOME/.keras/keras.json to use theano as a backend
+
 I've tested MancalaAI on Windows and Ubuntu 16.04 on Ubuntu I also had to install python3-dev
 
 ```
