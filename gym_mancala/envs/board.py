@@ -36,8 +36,8 @@ class Board:
         # don't select empty spaces
         if moving_marbles == 0:
             self.invalid_move = "Player " + str(int(self.player2_turn) + 1) + " made an invalid move"
-            self.game_over = True
-            self.mancala[int(self.player2_turn)] = -48
+            # self.game_over = True
+            self.mancala[int(self.player2_turn)] += -10
             # self.player2_turn = not self.player2_turn
             # return
 

@@ -5,7 +5,7 @@ from rl.policy import LinearAnnealedPolicy, EpsGreedyQPolicy
 
 def build_agent(model, env, steps):
     memory = SequentialMemory(limit=10000, window_length=1)
-    policy = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps', value_max=.25, value_min=.001, value_test=.05,
+    policy = LinearAnnealedPolicy(EpsGreedyQPolicy(), attr='eps', value_max=1., value_min=.001, value_test=.05,
                                   nb_steps=steps)
     return DQNAgent(model=model,
                     nb_actions=env.action_space.n,

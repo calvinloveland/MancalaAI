@@ -1,6 +1,6 @@
 import os
 
-# os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
+os.environ["KERAS_BACKEND"] = "theano"
 import random
 import math
 import numpy as np
@@ -12,29 +12,32 @@ from agent import build_agent
 from model import build_model
 from keras.optimizers import Adam, SGD
 from keras.models import load_model
+from shared.priority import set_background_priority
 
-MODEL_NUMBER = 8
+MODEL_NUMBER = 9
 NETWORKS_PATH = 'networks/'
 PATH = NETWORKS_PATH + 'Model' + str(MODEL_NUMBER) + '/'
 BEST_NETWORK_MODEL = NETWORKS_PATH + 'Model2/model.HDF5'
 BEST_NETWORK_WEIGHTS = NETWORKS_PATH + 'Model2/1881'
-STEPS = 5000
+STEPS = 20000000
 
 
 def train_network():
+    set_background_priority()
+
     if not os.path.exists(PATH):
         os.makedirs(PATH)
     environment = MancalaRandomEnv()
     model = build_model(environment)
     model.save(PATH + 'model.HDF5')
     agent = build_agent(model, environment, STEPS)
-    agent.compile(optimizer=Adam(lr=.01))
+    agent.compile(optimizer=Adam(lr=.1))
     agent.fit(environment,
               nb_steps=STEPS,
               action_repetition=1,
               callbacks=None,
               verbose=2,
-              visualize=True,
+              visualize=False,
               nb_max_start_steps=0,
               start_step_policy=None,
               log_interval=math.floor(STEPS / 10),
@@ -59,7 +62,7 @@ def test_networks():
                 agent.compile(optimizer=Adam(lr=.01))
                 agent.load_weights(NETWORKS_PATH + dirname + '/' + filename)
                 try:
-                    history = agent.test(environment, nb_episodes=10,
+                    history = agent.test(environment, nb_episodes=100,
                                          action_repetition=1,
                                          callbacks=None,
                                          visualize=False,
