@@ -9,7 +9,7 @@ class MancalaEnv(gym.Env):
     def __init__(self):
         self.board = Board()
         self.action_space = spaces.Discrete(6)
-        self.observation_space = spaces.Box(low=-1, high=1, shape=(2, 6))
+        self.observation_space = spaces.Box(low=-.5, high=5, shape=(2, 6))
         self.player = 0
 
     def step(self, action):
@@ -26,8 +26,15 @@ class MancalaEnv(gym.Env):
         self.board.print_board()
 
     def calculate_reward(self):
-        return (self.board.mancala[self.player] - self.board.mancala[1 - self.player]
-                + ((sum(self.board.marbles[self.player]) - sum(self.board.marbles[1 - self.player])) * 0.8))/48
+        if self.board.game_over:
+            if self.board.mancala[self.player] > self.board.mancala[1 - self.player]:
+                return 1
+            else:
+                return -1
+        else:
+            return max(-1, ((self.board.mancala[self.player] - self.board.mancala[1 - self.player]
+                             + ((sum(self.board.marbles[self.player]) - sum(
+                        self.board.marbles[1 - self.player])) * 0.8)) / 48))
 
     def normalize_marbles(self):
-        return np.divide(np.subtract(self.board.marbles, 3), 3)
+        return np.divide(np.subtract(self.board.marbles, 1.5), 3)
