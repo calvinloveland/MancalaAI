@@ -1,6 +1,5 @@
 import os
 
-os.environ["KERAS_BACKEND"] = "theano"
 import random
 import math
 import numpy as np
