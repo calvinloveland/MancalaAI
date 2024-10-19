@@ -4,8 +4,7 @@ import random
 
 import matplotlib.pyplot as plt
 import numpy as np
-from keras.models import load_model
-from keras.optimizers import SGD, Adam
+from tinygrad.nn import optim, load_model, save_model
 
 from agent import build_agent
 from gym_mancala.envs import MancalaUserEnv
@@ -41,9 +40,9 @@ def train_network():
         os.makedirs(PATH)
     environment = MancalaRandomEnv()
     model = build_model(environment)
-    model.save(PATH + "model.HDF5")
+    save_model(model, PATH + "model.HDF5")
     agent = build_agent(model, environment, STEPS)
-    agent.compile(optimizer=Adam(lr=0.1))
+    optimizer = optim.Adam(model.parameters(), lr=0.1)
     history = agent.fit(
         environment,
         nb_steps=STEPS,
@@ -74,7 +73,8 @@ def test_networks():
             if "HDF5" not in filename and "png" not in filename:
                 print("Testing: " + dirname + "/" + filename)
                 agent = build_agent(model, environment, STEPS)
-                agent.compile(optimizer=Adam(lr=1))
+                optimizer = optim.Adam(model.parameters(), lr=1)
+                agent.compile(optimizer=optimizer)
                 agent.load_weights(NETWORKS_PATH + dirname + "/" + filename)
                 try:
                     history = agent.test(
@@ -116,7 +116,8 @@ def play_network():
     environment = MancalaUserEnv()
     environment.board.print_board()
     agent = build_agent(model, environment, STEPS)
-    agent.compile(optimizer=Adam(lr=0.01))
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    agent.compile(optimizer=optimizer)
     agent.load_weights(BEST_NETWORK_WEIGHTS)
     agent.test(
         environment,
