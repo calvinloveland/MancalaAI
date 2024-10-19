@@ -1,5 +1,11 @@
 from tinygrad.nn import optim
-from tinygrad.nn import DQNAgent, SequentialMemory, EpsGreedyQPolicy, LinearAnnealedPolicy
+from tinygrad.nn import (
+    DQNAgent,
+    SequentialMemory,
+    EpsGreedyQPolicy,
+    LinearAnnealedPolicy,
+)
+
 
 def build_agent(model, env, steps):
     memory = SequentialMemory(limit=1000, window_length=1)
