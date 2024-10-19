@@ -16,7 +16,8 @@ classifiers = [
 dependencies = ["gymnasium","keras","tensorflow","keras-rl",
 "pyfiglet",
 "tqdm",
-"loguru",]
+"loguru",
+"tinygrad"]
 dynamic = ["version"]
 
 [project.scripts]
