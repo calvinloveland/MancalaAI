@@ -4,8 +4,8 @@ import random
 import unittest
 
 import numpy as np
-from keras.models import load_model
-from keras.optimizers import Adam
+from tinygrad.nn import optim
+from tinygrad.nn.state import safe_save, safe_load, get_state_dict, load_state_dict
 
 from .__main__ import play_network, test_networks, train_network
 from agent import build_agent
@@ -67,7 +67,8 @@ def test_play_network(self):
     model = load_model("networks/Model2/model.HDF5")
     environment = MancalaUserEnv()
     agent = build_agent(model, environment, 1000)
-    agent.compile(optimizer=Adam(lr=0.01))
+    optimizer = optim.Adam(model.parameters(), lr=0.01)
+    agent.compile(optimizer=optimizer)
     agent.load_weights("networks/Model2/4542")
     history = agent.test(environment, nb_episodes=1, verbose=0)
     assert history.history.get("episode_reward") is not None
