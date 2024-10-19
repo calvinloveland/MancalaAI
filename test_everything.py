@@ -4,9 +4,10 @@ import random
 import unittest
 
 import numpy as np
-from tinygrad.nn import load_model, optim
+from tinygrad.nn import optim
+from tinygrad.nn.state import safe_save, safe_load, get_state_dict, load_state_dict
 
-from __main__ import play_network, test_networks, train_network
+from .__main__ import play_network, test_networks, train_network
 from agent import build_agent
 from gym_mancala.envs import MancalaRandomEnv, MancalaUserEnv
 from gym_mancala.envs.board import Board
