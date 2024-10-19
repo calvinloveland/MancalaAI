@@ -1,4 +1,4 @@
-import gym
+import gymnasium as gym
 import random
 from gym_mancala.envs.mancala_env import MancalaEnv
 from gym_mancala.envs.board import Board

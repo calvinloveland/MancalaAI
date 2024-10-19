@@ -1,4 +1,4 @@
-from gymnasium import gym
+import gymnasium as gym
 from gymnasium import spaces
 from gym_mancala.envs.board import Board
 import numpy as np
