@@ -7,7 +7,7 @@ import numpy as np
 from keras.models import load_model
 from keras.optimizers import SGD, Adam
 
-from agent import build_agent
+from .agent import build_agent
 from gym_mancala.envs import MancalaUserEnv
 from gym_mancala.envs.board import Board
 from gym_mancala.envs.mancala_random_env import MancalaRandomEnv

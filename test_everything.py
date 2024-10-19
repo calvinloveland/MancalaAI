@@ -7,7 +7,7 @@ import numpy as np
 from keras.models import load_model
 from keras.optimizers import Adam
 
-from __main__ import play_network, test_networks, train_network
+from .__main__ import play_network, test_networks, train_network
 from agent import build_agent
 from gym_mancala.envs import MancalaRandomEnv, MancalaUserEnv
 from gym_mancala.envs.board import Board
