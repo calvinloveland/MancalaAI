@@ -1,7 +1,8 @@
 import gymnasium as gym
-from gymnasium import spaces
-from gym_mancala.envs.board import Board
 import numpy as np
+from gymnasium import spaces
+
+from gym_mancala.envs.board import Board
 
 
 class MancalaEnv(gym.Env):
@@ -9,7 +10,7 @@ class MancalaEnv(gym.Env):
     def __init__(self):
         self.board = Board()
         self.action_space = spaces.Discrete(6)
-        self.observation_space = spaces.Box(low=-.5, high=5, shape=(2, 6))
+        self.observation_space = spaces.Box(low=-0.5, high=5, shape=(2, 6))
         self.player = 0
 
     def step(self, action):
@@ -32,9 +33,23 @@ class MancalaEnv(gym.Env):
             else:
                 return -1
         else:
-            return max(-1, ((self.board.mancala[self.player] - self.board.mancala[1 - self.player]
-                             + ((sum(self.board.marbles[self.player]) - sum(
-                        self.board.marbles[1 - self.player])) * 0.8)) / 48))
+            return max(
+                -1,
+                (
+                    (
+                        self.board.mancala[self.player]
+                        - self.board.mancala[1 - self.player]
+                        + (
+                            (
+                                sum(self.board.marbles[self.player])
+                                - sum(self.board.marbles[1 - self.player])
+                            )
+                            * 0.8
+                        )
+                    )
+                    / 48
+                ),
+            )
 
     def normalize_marbles(self):
         return np.divide(np.subtract(self.board.marbles, 1.5), 3)

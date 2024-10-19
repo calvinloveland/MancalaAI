@@ -1,37 +1,37 @@
-import os
-
-import random
 import math
-import numpy as np
-import matplotlib.pyplot as plt
+import os
+import random
 
+import matplotlib.pyplot as plt
+import numpy as np
+from keras.models import load_model
+from keras.optimizers import SGD, Adam
+
+from agent import build_agent
 from gym_mancala.envs import MancalaUserEnv
 from gym_mancala.envs.board import Board
 from gym_mancala.envs.mancala_random_env import MancalaRandomEnv
-from agent import build_agent
 from model import build_model
-from keras.optimizers import Adam, SGD
-from keras.models import load_model
 from shared.priority import set_background_priority
 
 MODEL_NUMBER = 10
-NETWORKS_PATH = 'networks/'
-PATH = NETWORKS_PATH + 'Model' + str(MODEL_NUMBER) + '/'
-BEST_NETWORK_MODEL = NETWORKS_PATH + 'Model2/model.HDF5'
-BEST_NETWORK_WEIGHTS = NETWORKS_PATH + 'Model2/4542'
+NETWORKS_PATH = "networks/"
+PATH = NETWORKS_PATH + "Model" + str(MODEL_NUMBER) + "/"
+BEST_NETWORK_MODEL = NETWORKS_PATH + "Model2/model.HDF5"
+BEST_NETWORK_WEIGHTS = NETWORKS_PATH + "Model2/4542"
 STEPS = 2000000
 
 
 def plot_reward(history, network_id):
-    rewards = np.asarray(history.history.get('episode_reward'))
-    rewards = np.divide(rewards, np.asarray(history.history.get('nb_steps')))
+    rewards = np.asarray(history.history.get("episode_reward"))
+    rewards = np.divide(rewards, np.asarray(history.history.get("nb_steps")))
     if rewards.size > 10000:
         divisor = (rewards.size // 10000) + 1
         remainder = 10000 - (rewards.size % 10000)
-        rewards = np.pad(rewards, (remainder, 0), 'constant')
+        rewards = np.pad(rewards, (remainder, 0), "constant")
         rewards = np.mean(rewards.reshape(-1, divisor), axis=1)
     plt.plot(rewards)
-    plt.savefig(PATH + str(network_id) + '-rewards.png')
+    plt.savefig(PATH + str(network_id) + "-rewards.png")
 
 
 def train_network():
@@ -41,19 +41,21 @@ def train_network():
         os.makedirs(PATH)
     environment = MancalaRandomEnv()
     model = build_model(environment)
-    model.save(PATH + 'model.HDF5')
+    model.save(PATH + "model.HDF5")
     agent = build_agent(model, environment, STEPS)
-    agent.compile(optimizer=Adam(lr=.1))
-    history = agent.fit(environment,
-                        nb_steps=STEPS,
-                        action_repetition=1,
-                        callbacks=None,
-                        verbose=2,
-                        visualize=False,
-                        nb_max_start_steps=0,
-                        start_step_policy=None,
-                        log_interval=math.floor(STEPS / 10),
-                        nb_max_episode_steps=None)
+    agent.compile(optimizer=Adam(lr=0.1))
+    history = agent.fit(
+        environment,
+        nb_steps=STEPS,
+        action_repetition=1,
+        callbacks=None,
+        verbose=2,
+        visualize=False,
+        nb_max_start_steps=0,
+        start_step_policy=None,
+        log_interval=math.floor(STEPS / 10),
+        nb_max_episode_steps=None,
+    )
     network_id = random.randint(1, 10000)
     agent.save_weights(PATH + str(network_id))
     print("Saved network: " + str(network_id))
@@ -69,23 +71,26 @@ def test_networks():
         model = load_model(NETWORKS_PATH + dirname + "/model.HDF5")
         print(model.summary())
         for filename in filenames:
-            if 'HDF5' not in filename and 'png' not in filename:
-                print('Testing: ' + dirname + '/' + filename)
+            if "HDF5" not in filename and "png" not in filename:
+                print("Testing: " + dirname + "/" + filename)
                 agent = build_agent(model, environment, STEPS)
                 agent.compile(optimizer=Adam(lr=1))
-                agent.load_weights(NETWORKS_PATH + dirname + '/' + filename)
+                agent.load_weights(NETWORKS_PATH + dirname + "/" + filename)
                 try:
-                    history = agent.test(environment, nb_episodes=100,
-                                         action_repetition=1,
-                                         callbacks=None,
-                                         visualize=False,
-                                         nb_max_episode_steps=None,
-                                         nb_max_start_steps=0,
-                                         start_step_policy=None,
-                                         verbose=2)
-                    avg = np.mean(history.history.get('episode_reward'))
+                    history = agent.test(
+                        environment,
+                        nb_episodes=100,
+                        action_repetition=1,
+                        callbacks=None,
+                        visualize=False,
+                        nb_max_episode_steps=None,
+                        nb_max_start_steps=0,
+                        start_step_policy=None,
+                        verbose=2,
+                    )
+                    avg = np.mean(history.history.get("episode_reward"))
                     print("Average score: " + str(avg))
-                    avg_scores[dirname + '/' + filename] = avg
+                    avg_scores[dirname + "/" + filename] = avg
                 except:
                     print("Invalid format: " + filename)
     min = 1000
@@ -111,27 +116,32 @@ def play_network():
     environment = MancalaUserEnv()
     environment.board.print_board()
     agent = build_agent(model, environment, STEPS)
-    agent.compile(optimizer=Adam(lr=.01))
+    agent.compile(optimizer=Adam(lr=0.01))
     agent.load_weights(BEST_NETWORK_WEIGHTS)
-    agent.test(environment, nb_episodes=1,
-               action_repetition=1,
-               callbacks=None,
-               visualize=False,
-               nb_max_episode_steps=None,
-               nb_max_start_steps=0,
-               start_step_policy=None,
-               verbose=0)
+    agent.test(
+        environment,
+        nb_episodes=1,
+        action_repetition=1,
+        callbacks=None,
+        visualize=False,
+        nb_max_episode_steps=None,
+        nb_max_start_steps=0,
+        start_step_policy=None,
+        verbose=0,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     "Welcome to MancalaAI!"
-    userInput = input("Would you like to [t]rain a network, test [n]etworks, or [p]lay against a network?")
+    userInput = input(
+        "Would you like to [t]rain a network, test [n]etworks, or [p]lay against a network?"
+    )
     userInput = userInput.lower()
-    if userInput == 't':
+    if userInput == "t":
         train_network()
-    elif userInput == 'n':
+    elif userInput == "n":
         test_networks()
-    elif userInput == 'p':
+    elif userInput == "p":
         play_network()
     else:
         print("Invalid input")

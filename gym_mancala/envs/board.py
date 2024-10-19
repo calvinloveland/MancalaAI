@@ -1,4 +1,5 @@
 import copy
+
 import numpy as np
 
 
@@ -18,7 +19,7 @@ class Board:
             self.marbles = np.array([[4, 4, 4, 4, 4, 4], [4, 4, 4, 4, 4, 4]])
             self.player2_turn = False
             self.game_over = False
-            self.invalid_move = ''
+            self.invalid_move = ""
 
     def execute_turn(self, n):
         if self.game_over:
@@ -35,7 +36,9 @@ class Board:
 
         # don't select empty spaces
         if moving_marbles == 0:
-            self.invalid_move = "Player " + str(int(self.player2_turn) + 1) + " made an invalid move"
+            self.invalid_move = (
+                "Player " + str(int(self.player2_turn) + 1) + " made an invalid move"
+            )
             # self.game_over = True
             self.mancala[int(self.player2_turn)] += -10
             # self.player2_turn = not self.player2_turn
@@ -56,10 +59,16 @@ class Board:
 
         current_space -= 1
         # stealing marbles by ending on an empty space
-        if current_space < 6 and current_space >= 0 and self.marbles[int(current_side)][
-            current_space] == 1 and current_side == self.player2_turn and self.marbles[int(not current_side)][
-            5 - current_space] > 0:
-            self.mancala[int(current_side)] += self.marbles[int(not current_side)][5 - current_space] + 1
+        if (
+            current_space < 6
+            and current_space >= 0
+            and self.marbles[int(current_side)][current_space] == 1
+            and current_side == self.player2_turn
+            and self.marbles[int(not current_side)][5 - current_space] > 0
+        ):
+            self.mancala[int(current_side)] += (
+                self.marbles[int(not current_side)][5 - current_space] + 1
+            )
             self.marbles[int(not current_side)][5 - current_space] = 0
             self.marbles[int(current_side)][current_space] = 0
 
@@ -78,11 +87,11 @@ class Board:
     def print_board(self):
         print(self.invalid_move)
         print(str(int(self.player2_turn) + 1))
-        print(str(self.mancala[0]) + '<-' + str(list(reversed(self.marbles[0]))) + '<-')
-        print(' ->' + str(self.marbles[1]) + '->' + str(self.mancala[1]))
+        print(str(self.mancala[0]) + "<-" + str(list(reversed(self.marbles[0]))) + "<-")
+        print(" ->" + str(self.marbles[1]) + "->" + str(self.mancala[1]))
         if self.game_over:
-            print('GAME OVER')
-            print('PLAYER ' + str(int(self.mancala[0] < self.mancala[1]) + 1) + ' WINS')
+            print("GAME OVER")
+            print("PLAYER " + str(int(self.mancala[0] < self.mancala[1]) + 1) + " WINS")
 
     def get_current_player_score(self):
         return self.mancala[int(self.player2_turn)]
